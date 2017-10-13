@@ -1,11 +1,13 @@
-^.*\.Rproj$            # Automatically added by RStudio,
-^\.Rproj\.user$        # used for temporary files. 
-/sublws/.*             # Ignore any sublime text files
-^README\.Rmd$          # An Rmarkdown file used to generate README.md
-^cran\-comments\.md$   # Comments for CRAN submission
-^NEWS\.md$             # A news file written in Markdown
-^\.travis\.yml$        # Used for continuous integration testing with travis
-.*vignettes/figure.*   # Figures should be excluded
-^.*.tar.gz$            # Package Builds
-^building and testing\.R$  # devtools command used interactively
-
+^\.gitignore$
+^.*\.png$
+^.*\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+^NEWS\.md$
+^\.travis\.yml$
+^vignettes/figure.*
+^.*\.tar\.gz$
+^building and testing\.R$
+^sublws/.*$
+^working_examples\.R$
+^cran-comments\.md$
