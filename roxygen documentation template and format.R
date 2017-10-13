@@ -132,10 +132,6 @@ PARAMS_DOC_GENERAL <- make_param_docs_from_file()
 }
 
 
-make_param_docs_from_file <- function(file_full_path) {
-  &&&&&&&&& TODO
-}
-
 add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
   ret <- strsplit(x, "\\n") %>%
           vapply(function(x_i) paste0(tick, x_i, collapse="\n"), character(1L))
