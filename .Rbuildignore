@@ -11,3 +11,6 @@
 ^sublws/.*$
 ^working_examples\.R$
 ^cran-comments\.md$
+^roxygen documentation template and format\.R$
+^example_file\.R$
+^file_for_testing\.R$
