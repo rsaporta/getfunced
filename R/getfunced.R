@@ -24,7 +24,10 @@ get_funced <- function(file) {
 }
 
 
-get_functions_and_formals <- function(file) { 
+get_functions_and_formals <- function(file, okay_to_source.safety_flag=FALSE) { 
+  if (!okay_to_source.safety_flag)
+    stop("\n\nYou need to set\n    'okay_to_source.safety_flag = TRUE'\n\n\nEXPLANATION:\n    get_functions_and_formals() relies on sourcing the file.\n    If the file contains only function definitions, then this should not be a problem.\n    However if the file mixes other code (including examples) with definitions,\n    then that code will be executed. We implemented this safety flag\n    to make sure you are okay with sourcing the file.\n\n\nNOTE:\n    The file will be sourced into a new environment.\n    This will keep your globalenv() clean, but it might still cause side effects\n    if your code modifies files on disk or if your code calls other environments")
+
   e <- new.env()
   source(file=file, local=e)
   
