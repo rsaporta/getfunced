@@ -47,8 +47,8 @@ https://gist.github.com/jefferys/b79fe87314b0dc72fec9
 NULL
 
 if (FALSE) {
-  filename <- "example.file.R"
-  file_full_path <- as.path("~/Development", filename)
+  file_full_path <- "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R"
+  filename <- basename(file_full_path)
 
   title=basename(file_full_path)
   left_pad = 3
@@ -58,10 +58,16 @@ if (FALSE) {
 
 # 
 
+catn <- function(..., sep="\n")
+cat(..., sep="\n")
+
 # #' @importFrom magrittr %<>%
 # #' @importFrom magrittr %>%
 make_group_documentation <- function(
     file_full_path
+  , one_liner       = "ONE-LINER WHAT IT DOES"
+  , detailed_desc   = "DETAILED DESCRIPTION of what these functions do"
+  , other_sections  = list(section_name = "text paragraph")
   , aliases         = c()
   , return          = "WHAT IS RETURNED??"
   , example_text    = "\n"
@@ -79,18 +85,41 @@ make_group_documentation <- function(
   if (neat_box_title)
     header %<>% neat_box
 
-  if (missing(title) && grepl(pattern = "\\.", title)) {
-    title %<>% strsplit("\\.")[[1L]] %>% head(-1L) %>% paste(collapse="_")
+  if (missing(title)) {
+    title %<>% gsub(pattern="\\.[R|r]$", replace="") %>% title_case_ap_style()
   }
-  title %<>% gsub(pattern=" ", "_")
+  # title %<>% gsub(pattern=" ", "_")
 
   name <- tolower(title)
 
   if (file_exists(example_text))
     example_text <- readLines(example_text)
 
+  section_text <- ""
+  if (!identical(other_sections, list(section_name = "text paragraph"))) {
+      section_text <- sprintf("@%s\n          %s", names(other_sections), as.character(unlist(other_sections, use.names = FALSE))) %>% 
+                        paste(collapse="\n\n")
+  }
 
 
+  top_part <- 
+  paste(sep="\n"
+  , ""
+  , title
+  , ""
+  , one_liner
+  , ""
+  , section_text
+  ) %>% add_roxygen_ticks
+
+  catn(header, top_part)
+}
+
+add_roxygen_ticks <- function(x, tick="#' ") {
+  strsplit(x, "\\n") %>%
+    lapply(function(x_i) paste0(tick, x_i))
+
+  x <- top_part
 }
 
 neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
