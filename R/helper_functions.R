@@ -18,3 +18,19 @@ title_case_ap_style <- function(x) {
 
   return(x)
 }
+
+
+.confirm_is_string_of_length1 <- function(string, nm_for_err_msg, empty_string_ok=FALSE) {
+  if (missing(nm_for_err_msg)) {
+    nm_for_err_msg <- as.character(substitute(string))
+  }
+
+  if (length(string) != 1)
+    stop("Invalid input for '", nm_for_err_msg, "'.  It should be a non-empty string of length 1 -- it has length ", length(string))
+  if (!is.character(string))
+    stop("Invalid input for '", nm_for_err_msg, "'.  It should be a non-empty string of length 1 -- it is an object of class \"", class(string)[[1L]], "\"")
+  if (!empty_string_ok && !nzchar(string))
+    stop("Invalid input for '", nm_for_err_msg, "'.  It should be a non-empty string of length 1 -- it is an empty string.")
+
+  return(invisible(TRUE))
+}
