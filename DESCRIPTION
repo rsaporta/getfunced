@@ -1,8 +1,9 @@
 Package: getfunced
-Title: What the Package Does (One Paragraph).
-Version: 0.0.0.9000
+Title:  Function Parsers and Documenters for R
+Version: 0.0.1
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description:  Function Parsers and Documenters for R.
+    Unstable development version (first committed on October 13, 2017).
 Depends: R (>= 3.3.3)
 License: MIT + file LICENSE
 Encoding: UTF-8
