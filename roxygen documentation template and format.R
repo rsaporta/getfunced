@@ -34,22 +34,91 @@ https://gist.github.com/jefferys/b79fe87314b0dc72fec9
 #'
 #' @SECTION-NAME text
 #' 
+#' @name 
 #' @aliases 
 #' 
-#' @param one is. default: 
-#' @param two is. default: 
+#' @param one  ## GRAB THE SHARED PARAMS HERE
+#' @param two 
 #'
 #' @return 
 #'
 #' @examples
 #' 
-#' @name anyNameButFunctionNameIsUnique
 NULL
 
-filename
-filename %>% toproper
+if (FALSE) {
+  filename <- "example.file.R"
+  file_full_path <- as.path("~/Development", filename)
 
-aliases vector of strings. defaults to c()
+  title=basename(file_full_path)
+  left_pad = 3
+
+  example_text <- "/Users/rsaporta/Development/rpkgs/getfunced/example_file.R"
+}
+
+# 
+
+# #' @importFrom magrittr %<>%
+# #' @importFrom magrittr %>%
+make_group_documentation <- function(
+    file_full_path
+  , aliases         = c()
+  , return          = "WHAT IS RETURNED??"
+  , example_text    = "\n"
+  , filename        = basename(file_full_path)
+  , title           = filename
+  , header          = filename
+  , neat_box_title  = TRUE
+) {
+  if (length(file_full_path) != 1 || !is.character(file_full_path) || !nzchar(file_full_path))
+    stop("invalid input for file_full_path --  It should be a character string of length 1")
+  if (!file.exists(file_full_path))
+    stop("file '", file_full_path, "' does not exist")
+
+
+  if (neat_box_title)
+    header %<>% neat_box
+
+  if (missing(title) && grepl(pattern = "\\.", title)) {
+    title %<>% strsplit("\\.")[[1L]] %>% head(-1L) %>% paste(collapse="_")
+  }
+  title %<>% gsub(pattern=" ", "_")
+
+  name <- tolower(title)
+
+  if (file_exists(example_text))
+    example_text <- readLines(example_text)
+
+
+
+}
+
+neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
+  if (!is.numeric(left_pad)) {
+    warning("'left_pad' should be a number.  Will use 0")
+    left_pad <- 0
+  }
+  if (!is.numeric(min_width)) {
+    warning("'min_width' should be a number.  Will use 0")
+    min_width <- 0
+  }
+
+  min_width %<>% as.integer()
+  left_pad %<>% as.integer()
+
+  width <- max(min_width, nchar(x) + 6L + left_pad)
+  width <- width - 4L
+  hr_bar <- rep("=", width) %>% paste0(collapse="")
+  text_bar <- (width - left_pad) %>% paste0("%", left_pad, "s", "%-", ., "s") %>% sprintf("", x)
+  
+  ## RETURN
+  c(hr_bar, text_bar, hr_bar) %>% paste0("# ", ., " #", collapse=collapse)
+}
+
+# filename
+# filename %>% toproper
+
+# aliases vector of strings. defaults to c()
 
 
 #==========================================================
@@ -73,9 +142,6 @@ aliases vector of strings. defaults to c()
 #' might want to have a manual list here.
 #' @name anyNameButFunctionNameIsUnique
 NULL
-
-filename
-filename %>% toproper
 
 
 
