@@ -14,3 +14,4 @@
 ^roxygen documentation template and format\.R$
 ^example_file\.R$
 ^file_for_testing\.R$
+^test_file_with_matching_funcs\.R$
