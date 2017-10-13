@@ -2,8 +2,9 @@ if (FALSE) {
   library(magrittr)
   library(colorout)
   options(width = 101)
-  file <- "/Users/rsaporta/Development/rpkgs/rcreds/R/helper_functions.R"
-  ret <- get_funced(file)
+  file <- "~/Development/rpkgs/getfunced/file_for_testing.R"
+  ret <- get_funced(file, okay_to_source.safety_flag=TRUE)
+  ret
   for (r in ret) {
     cat("\n")
     cat("|-------------------------------------------------------------|\n")
@@ -15,13 +16,16 @@ if (FALSE) {
 
 #' @importFrom tools toTitleCase
 #' @importFrom rsugeneral topropper
-get_funced <- function(file) {
+get_funced <- function(file, okay_to_source.safety_flag=FALSE) { 
 
-  ret <- mapply(format_function, names(FRMS), FRMS)
+  ret <- get_functions_and_formals(file, okay_to_source.safety_flag=okay_to_source.safety_flag) %>% 
+          {mapply(format_function, formals_as_list=., func_nm=names(.))} %>%
+          as.funced
 
-  rm(e)
   return(ret)
 }
+
+
 
 
 get_functions_and_formals <- function(file, okay_to_source.safety_flag=FALSE) { 
@@ -38,16 +42,36 @@ get_functions_and_formals <- function(file, okay_to_source.safety_flag=FALSE) {
 
   formals_as_list <- lapply(functions, formals)
 
+  rm(e)
+
   return(formals_as_list)
 }
 
 #' @importFrom magrittr %<>%
 #' @importFrom magrittr %>%
 #' @importFrom stats setNames
-format_function <- function(func_nm, formals_as_list, max_wdith=88, multi_line="auto") {
+format_function <- function(formals_as_list, func_nm=names(formals_as_list), max_wdith=88, multi_line="auto") {
+  if (!length(formals_as_list)) {
+    warning("formals_as_list had no length")
+    return("")
+  }
 
-  if (length(formals_as_list) && !is.list(formals_as_list))
-    stop("formals_as_list should be a list --- ## TODO:  Can we simply coerce to list?")
+  if (length(func_nm) > 1) {
+          browser(text = "iteraring")
+          print.default(formals_as_list)
+          print.default(func_nm)
+          browserText()
+    RET <- iterateWithArgs(arg=list(formals_as_list, func_nm), FUNC=format_function)
+    return(RET)
+  }
+  if (!is.funced(formals_as_list)) {
+    # browser(text = "pre fail")
+    if (length(formals_as_list) && !is.list(formals_as_list))
+      stop("formals_as_list should be a list --- ## TODO:  Can we simply coerce to list?")
+  }
+
+  if (is.null(func_nm))
+    stop("'func_nm' cannot be NULL.  ", if (missing(func_nm)) "\nHINT:  by default format_function() uses names(formals_as_list).  Perhaps the parameter is unnamed")
 
   ## ------------------------------ ##
   ## validate multi_line
@@ -140,7 +164,21 @@ capture_output_of_formals <- function(formals_as_list) {
   which_integers <- vapply(formals_as_list, function(x) is.integer(x) && length(x) == 1 && !is.na(x), FUN.VALUE = logical(1L))
   out_via_ac[which_integers] %<>% vapply(paste0, "L", FUN.VALUE = character(1L))
 
-  ret <- ifelse(grepl("^\\s*\\[\\s*\\d\\s*\\]", out_via_co), out_via_ac, out_via_co)
+  which_strings <- vapply(formals_as_list, function(x) is.character(x) && length(x) == 1 && !is.na(x), FUN.VALUE = logical(1L))
+
+  ret <- ifelse(grepl("^\\s*\\[\\s*\\d\\s*\\]", out_via_co), out_via_ac, out_via_co) %>% 
+           gsub(pattern="\n", replace="\\\\n", x=.) %>% 
+           gsub(pattern="\"", replace="\\\\\"", x=.)
+
+  ret[which_strings] %<>% paste0("\"", ., "\"")
+
+  ## ------------------------------------------ ##
+  ## FOR DEBUGGING
+  ## ------------------------------------------ ##
+  # browser(text = "check output from capture_output_of_formals")
+  # if (FALSE)
+  #   get_funced(file, TRUE)
+  ## ------------------------------------------ ##
 
   ## in case curious, when debugging
   if (FALSE) {
