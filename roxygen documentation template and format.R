@@ -74,23 +74,29 @@ make_group_documentation <- function(
   , filename        = basename(file_full_path)
   , title           = filename
   , header          = filename
-  , neat_box_title  = TRUE
 ) {
   if (length(file_full_path) != 1 || !is.character(file_full_path) || !nzchar(file_full_path))
     stop("invalid input for file_full_path --  It should be a character string of length 1")
   if (!file.exists(file_full_path))
     stop("file '", file_full_path, "' does not exist")
 
+  .confirm_is_string_of_length1(header)
+  .confirm_is_string_of_length1(title)
+  .confirm_is_string_of_length1(filename)
+  .confirm_is_string_of_length1(one_liner)
+  .confirm_is_string_of_length1(detailed_desc)
 
-  if (neat_box_title)
-    header %<>% neat_box
+  if (!is.list(other_sections) ||  is.null(names(other_sections)) || !nzchar(names(other_sections)))
+    stop("other_sections should be a named list of strings")
+
+  header %<>% neat_box %>% paste0("\n# ")
 
   if (missing(title)) {
     title %<>% gsub(pattern="\\.[R|r]$", replace="") %>% title_case_ap_style()
   }
   # title %<>% gsub(pattern=" ", "_")
 
-  name <- tolower(title)
+  name <- tolower(title) %>% gsub("\\s", "_", x=.) %>% paste("@name", .)
 
   if (file_exists(example_text))
     example_text <- readLines(example_text)
@@ -101,26 +107,51 @@ make_group_documentation <- function(
                         paste(collapse="\n\n")
   }
 
-
+PARAMS_DOC_GENERAL <- make_param_docs_from_file()
   top_part <- 
   paste(sep="\n"
-  , ""
-  , title
-  , ""
-  , one_liner
-  , ""
-  , section_text
-  ) %>% add_roxygen_ticks
+    , title
+    , ""
+    , one_liner
+    , ""
+    , section_text
+    , ""
+    , name
+    , ""
+    , PARAMS_DOC_GENERAL
+    , ""
+    , "@return"
+    , return
+    , ""
+    , "@examples"
+    , example_text
+    , ""
+  ) %>% add_roxygen_ticks(clear_multiple_lines=TRUE)
 
   catn(header, top_part)
 }
 
-add_roxygen_ticks <- function(x, tick="#' ") {
-  strsplit(x, "\\n") %>%
-    lapply(function(x_i) paste0(tick, x_i))
 
-  x <- top_part
+make_param_docs_from_file <- function(file_full_path) {
+  &&&&&&&&& TODO
 }
+
+add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
+  ret <- strsplit(x, "\\n") %>%
+          vapply(function(x_i) paste0(tick, x_i, collapse="\n"), character(1L))
+
+  if (clear_multiple_lines) {
+    pat <- tick %>% rep(at_least_reps) %>% paste0("\n", collapse = "")
+    rep <- tick %>% paste0("\n", collapse = "")
+    safety.no_infinite_loop <- 100
+    while(grepl(pat, ret) && safety.no_infinite_loop) {
+      ret %<>% gsub(pattern=pat, replace=rep)
+      safety.no_infinite_loop %<>% "-"(1)
+    } ## // while-loop
+  } ## // if clause
+
+  return(ret)
+} 
 
 neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
   if (!is.numeric(left_pad)) {
