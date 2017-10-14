@@ -16,7 +16,7 @@ function_one <- function(file_full_path, filename="name 1", folder=getOption("wr
 
 
 
-function_two <- function(file_full_path, filename="NAME 2", folder=getOption("wrkDir", default="~/test_dir"), unqiue_param_number_2, wrongly_shared="some param") {
+function_two <- function(file_full_path, filename="NAME 2", folder=getOption("wrkDir", default="~/test_dir"), unqiue_param_number_2, wrongly_shared="some param", uneven_param = "this is just in 2nd") {
   "bar"
 
   list(foo = "bar")
@@ -32,5 +32,13 @@ function_two <- function(file_full_path, filename="NAME 2", folder=getOption("wr
   ## more more comments
   "more more stuff"
 }
+
+
+
+
+function_three <- function(file_full_path, filename="NAME 2", folder=getOption("wrkDir", default="~/test_dir")) {
+  "blaaaaahhhhhh"
+}
+
 
 
