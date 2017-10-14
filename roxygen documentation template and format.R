@@ -1,62 +1,62 @@
-framework borrowed from: 
-https://gist.github.com/jefferys/b79fe87314b0dc72fec9
+# framework borrowed from: 
+# https://gist.github.com/jefferys/b79fe87314b0dc72fec9
 
-# ======================================================== #
-#   use file name here   #
-# ======================================================== #
+# # ======================================================== #
+# #   use file name here   #
+# # ======================================================== #
 
 
-### PARAM FORMAT
+# ### PARAM FORMAT
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-### WITH DEFAULT VALUE
-#' @param param_name param_description.  
-#'        WHAT IS IT?
-#' 
-#'        Default is \code{as.character(substitute(arg_to_iterate_over))}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ### WITH DEFAULT VALUE
+# #' @param param_name param_description.  
+# #'        WHAT IS IT?
+# #' 
+# #'        Default is \code{as.character(substitute(arg_to_iterate_over))}
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-### WITH NO DEFAULT
-#' @param param_name param_description.  
-#'        WHAT IS IT?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ### WITH NO DEFAULT
+# #' @param param_name param_description.  
+# #'        WHAT IS IT?
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#==========================================================
-# $FILENAME$
-#==========================================================
+# #==========================================================
+# # $FILENAME$
+# #==========================================================
 
-#' TITLE
-#' 
-#' ONE-LINER WHAT IT DOES
-#' 
-#' DETAILED DESCRIPTION
-#'
-#' @SECTION-NAME text
-#' 
-#' @name 
-#' @aliases 
-#' 
-#' @param one  ## GRAB THE SHARED PARAMS HERE
-#' @param two 
-#'
-#' @return 
-#'
-#' @examples
-#' 
-NULL
+# #' TITLE
+# #' 
+# #' ONE-LINER WHAT IT DOES
+# #' 
+# #' DETAILED DESCRIPTION
+# #'
+# #' @SECTION-NAME text
+# #' 
+# #' @name 
+# #' @aliases 
+# #' 
+# #' @param one  ## GRAB THE SHARED PARAMS HERE
+# #' @param two 
+# #'
+# #' @return 
+# #'
+# #' @examples
+# #' 
+# NULL
 
-if (FALSE) {
-  file_full_path <- "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R"
-  filename <- basename(file_full_path)
+# if (FALSE) {
+#   file_full_path <- "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R"
+#   filename <- basename(file_full_path)
 
-  title=basename(file_full_path)
-  left_pad = 3
+#   title=basename(file_full_path)
+#   left_pad = 3
 
-  example_text <- "/Users/rsaporta/Development/rpkgs/getfunced/example_file.R"
-}
+#   example_text <- "/Users/rsaporta/Development/rpkgs/getfunced/example_file.R"
+# }
 
-# 
+# # 
 
 catn <- function(..., sep="\n")
 cat(..., sep="\n")
@@ -65,7 +65,7 @@ cat(..., sep="\n")
 # #' @importFrom magrittr %>%
 make_group_documentation <- function(
     file_full_path
-  , one_liner       = "ONE-LINER WHAT IT DOES"
+  , one_liner       = "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)"
   , detailed_desc   = "DETAILED DESCRIPTION of what these functions do"
   , other_sections  = list(section_name = "text paragraph")
   , aliases         = c()
@@ -98,7 +98,7 @@ make_group_documentation <- function(
 
   name <- tolower(title) %>% gsub("\\s", "_", x=.) %>% paste("@name", .)
 
-  if (file_exists(example_text))
+  if (file.exists(example_text))
     example_text <- readLines(example_text)
 
   section_text <- ""
@@ -107,18 +107,24 @@ make_group_documentation <- function(
                         paste(collapse="\n\n")
   }
 
-PARAMS_DOC_GENERAL <- make_param_docs_from_file()
+make_param_docs_from_file(file_full_path)
+PARAMS_DOC_GENERAL <- make_param_docs_from_file(file_full_path)
+
   top_part <- 
   paste(sep="\n"
     , title
     , ""
     , one_liner
     , ""
+    , detailed_desc
+    , ""
     , section_text
     , ""
     , name
     , ""
+    , "## -------------------------------  PARAMS  ------------------------------- ##"
     , PARAMS_DOC_GENERAL
+    , "## ------------------------------------------------------------------------ ##"
     , ""
     , "@return"
     , return
@@ -130,7 +136,6 @@ PARAMS_DOC_GENERAL <- make_param_docs_from_file()
 
   catn(header, top_part)
 }
-
 
 add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
   ret <- strsplit(x, "\\n") %>%
