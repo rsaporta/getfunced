@@ -1,11 +1,6 @@
 # framework borrowed from: 
 # https://gist.github.com/jefferys/b79fe87314b0dc72fec9
 
-# # ======================================================== #
-# #   use file name here   #
-# # ======================================================== #
-
-
 # ### PARAM FORMAT
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,6 +41,13 @@
 # #' 
 # NULL
 
+# 
+# ## TEMPLATE FOR FUNCTIONS
+# #' @rdname NAME
+# #' @importFrom magrittr %>%
+# #' @export
+# 
+
 # if (FALSE) {
 #   file_full_path <- "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R"
 #   filename <- basename(file_full_path)
@@ -60,6 +62,8 @@
 
 catn <- function(..., sep="\n")
 cat(..., sep="\n")
+
+DEVING <- TRUE
 
 # #' @importFrom magrittr %<>%
 # #' @importFrom magrittr %>%
@@ -97,6 +101,7 @@ make_group_documentation <- function(
   # title %<>% gsub(pattern=" ", "_")
 
   name <- tolower(title) %>% gsub("\\s", "_", x=.) %>% paste("@name", .)
+  rdname <- sub("^@name", "@rdname", x=name)
 
   if (file.exists(example_text))
     example_text <- readLines(example_text)
@@ -107,35 +112,63 @@ make_group_documentation <- function(
                         paste(collapse="\n\n")
   }
 
-make_param_docs_from_file(file_full_path)
-PARAMS_DOC_GENERAL <- make_param_docs_from_file(file_full_path)
+  make_param_docs_from_file(file_full_path)
+  PARAMS_DOC_GENERAL <- make_param_docs_from_file(file_full_path)
 
-  top_part <- 
-  paste(sep="\n"
-    , title
-    , ""
-    , one_liner
-    , ""
-    , detailed_desc
-    , ""
-    , section_text
-    , ""
-    , name
-    , ""
-    , "## -------------------------------  PARAMS  ------------------------------- ##"
-    , PARAMS_DOC_GENERAL
-    , "## ------------------------------------------------------------------------ ##"
-    , ""
-    , "@return"
-    , return
-    , ""
-    , "@examples"
-    , example_text
-    , ""
-  ) %>% add_roxygen_ticks(clear_multiple_lines=TRUE)
+  MAIN <- paste(sep="\n"
+      , title
+      , ""
+      , one_liner
+      , ""
+      , detailed_desc
+      , ""
+      , section_text
+      , ""
+      , name
+      , ""
+      , "## -------------------------------  PARAMS  ------------------------------- ##"
+      , PARAMS_DOC_GENERAL
+      , "## ------------------------------------------------------------------------ ##"
+      , ""
+      , "@return"
+      , return
+      , ""
+      , "@examples"
+      , example_text
+      , ""
+    ) %>% 
+    add_roxygen_ticks(clear_multiple_lines=TRUE) %>% 
+    paste(header, ., "NULL", sep="\n")
 
-  catn(header, top_part)
+  catn(MAIN)
+
+
+&&&&&&&&&&&&&&&&&&& LEFT OFF HERE
+  ## TODO:  use 
+  #    formals_as_list <- get_functions_and_formals(file_full_path, TRUE)
+  # and read the function name to determine whether to export or not.
+  # if not export, preface with a '#'?
+&&& ???  export_func &&&&&&&&
+  FUNC_PART <- paste(sep="\n"
+      , rdname
+      , "@importFrom magrittr %>%"
+      , ifelse(export_func, "", "# ", "@export")
+    ) %>% 
+    add_roxygen_ticks(clear_multiple_lines=TRUE)
+
+  catn("\n~~~~~~~~~~~~~~~~~~~\n")
+  catn(FUNC_PART)
+
+
+## TEMPLATE FOR FUNCTIONS
+#' @rdname NAME
+#' @importFrom magrittr %>%
+#' @export
+
+  return(list(MAIN, FUNC_PART))
 }
+if (FALSE | DEVING)
+  make_group_documentation(file_full_path)
 
 add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
   ret <- strsplit(x, "\\n") %>%
