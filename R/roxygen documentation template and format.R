@@ -4,6 +4,7 @@
 #
 if (FALSE)
 devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
+
 #' Roxygen Documentation Template and Format
 #'
 #' ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)
@@ -12,7 +13,7 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #'
 #' @name roxygen_documentation_template_and_format
 #'
-#' ## -------------------------------  PARAMS  ------------------------------- ##
+#X## -------------------------------  PARAMS  ------------------------------- ##
 #' @param x <DESCRIBE ME>
 #'          <WHAT IS IT?>
 #'
@@ -111,7 +112,7 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #'                 <WHAT IS IT?>
 #'
 #'                 Defaults to: "\n"
-#' ## ------------------------------------------------------------------------ ##
+#X## ------------------------------------------------------------------------ ##
 #'
 #' @return
 #' WHAT IS RETURNED??
@@ -169,7 +170,7 @@ NULL
 # ## TEMPLATE FOR FUNCTIONS
 # #' @rdname NAME
 # #' @importFrom magrittr %>%
-#' @export
+# #' @export
 # 
 
 # if (FALSE) {
@@ -187,7 +188,7 @@ NULL
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#' @export
+#X## @export
 catn <- function(..., sep="\n")
 cat(..., sep="\n")
 
@@ -295,13 +296,13 @@ make_group_documentation <- function(
       , "@importFrom magrittr %>%"
       , paste0(ifelse(export_func, "", "# "), "@export")
     ) %>% 
-    add_roxygen_ticks(clear_multiple_lines=TRUE)
+    add_roxygen_ticks(clear_multiple_lines=TRUE) %>% 
 
-  catn("\n~~~~~~~~~~~~~~~~~~~\n")
+  catn("\n##   ~~~~~~~~~~~~~~~~~~~\n")
 
   for (i in seq_along(FUNC_PART)) {
     catn("\n---------------------------------")
-    catn(FUNCS[[i]])
+    catn("            -= ", FUNCS[[i]], " =- ")
     catn(FUNC_PART[[i]])
     catn("---------------------------------")
   }
@@ -310,17 +311,27 @@ make_group_documentation <- function(
   return(list(MAIN, FUNC_PART))
 }
 if (FALSE) {
+
   # make_group_documentation(file_full_path, okay_to_source.safety_flag=TRUE)
-  "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R" %>% 
+  "~/Development/rpkgs/getfunced/R/roxygen documentation template and format.R" %>% 
   make_group_documentation(okay_to_source.safety_flag=TRUE)
 }
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
 #' @export
-#' add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
+add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L, comment_space="X") {
+  pat.comment  <- paste0("^", tick, "\\s*#")
+  repl.comment <- paste0("#", comment_space, "#")
+
+  # ret <- strsplit(x, "\\n") %>%
+  #         vapply(function(x_i) paste0(tick, x_i, collapse="\n"), character(1L))
   ret <- strsplit(x, "\\n") %>%
-          vapply(function(x_i) paste0(tick, x_i, collapse="\n"), character(1L))
+          vapply(function(x_i) {
+              paste0(tick, x_i) %>% 
+              gsub(pattern=pat.comment, replace=repl.comment) %>%
+              paste0(collapse="\n")
+          }, FUN.VALUE=character(1L))
 
   if (clear_multiple_lines) {
     pat <- tick %>% rep(at_least_reps) %>% paste0("\n", collapse = "")
@@ -332,13 +343,15 @@ if (FALSE) {
     } ## // while-loop
   } ## // if clause
 
+
+
   return(ret)
 } 
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#' # @export
-#' neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
+#X## @export
+neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
   if (!is.numeric(left_pad)) {
     warning("'left_pad' should be a number.  Will use 0")
     left_pad <- 0
