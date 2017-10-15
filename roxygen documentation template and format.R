@@ -2,6 +2,8 @@
 #    roxygen documentation template and format.R             #
 # ========================================================== #
 #
+if (FALSE)
+devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #' Roxygen Documentation Template and Format
 #'
 #' ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)
@@ -167,7 +169,7 @@ NULL
 # ## TEMPLATE FOR FUNCTIONS
 # #' @rdname NAME
 # #' @importFrom magrittr %>%
-# #' @export
+#' @export
 # 
 
 # if (FALSE) {
@@ -185,7 +187,8 @@ NULL
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#' @exportcatn <- function(..., sep="\n")
+#' @export
+catn <- function(..., sep="\n")
 cat(..., sep="\n")
 
 # DEVING <- TRUE
@@ -314,7 +317,7 @@ if (FALSE) {
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-# #' @export
+#' @export
 #' add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
   ret <- strsplit(x, "\\n") %>%
           vapply(function(x_i) paste0(tick, x_i, collapse="\n"), character(1L))
