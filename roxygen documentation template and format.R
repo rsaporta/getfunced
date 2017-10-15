@@ -1,3 +1,125 @@
+# ========================================================== #
+#    roxygen documentation template and format.R             #
+# ========================================================== #
+#
+#' Roxygen Documentation Template and Format
+#'
+#' ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)
+#'
+#' DETAILED DESCRIPTION of what these functions do
+#'
+#' @name roxygen_documentation_template_and_format
+#'
+#' ## -------------------------------  PARAMS  ------------------------------- ##
+#' @param x <DESCRIBE ME>
+#'          <WHAT IS IT?>
+#'
+#' @param tick <DESCRIBE ME>
+#'             <WHAT IS IT?>
+#'
+#'             Defaults to: "#' "
+#'
+#' @param clear_multiple_lines <DESCRIBE ME>
+#'                             <WHAT IS IT?>
+#'
+#'                             Defaults to: FALSE
+#'
+#' @param at_least_reps <DESCRIBE ME>
+#'                      <WHAT IS IT?>
+#'
+#'                      Defaults to: 2L
+#'
+#' @param ... <DESCRIBE ME>
+#'            <WHAT IS IT?>
+#'
+#' @param sep <DESCRIBE ME>
+#'            <WHAT IS IT?>
+#'
+#'            Defaults to: "\n"
+#'
+#' @param file_full_path <DESCRIBE ME>
+#'                       <WHAT IS IT?>
+#'
+#' @param one_liner <DESCRIBE ME>
+#'                  <WHAT IS IT?>
+#'
+#'                  Defaults to: "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)"
+#'
+#' @param detailed_desc <DESCRIBE ME>
+#'                      <WHAT IS IT?>
+#'
+#'                      Defaults to: "DETAILED DESCRIPTION of what these functions do"
+#'
+#' @param other_sections <DESCRIBE ME>
+#'                       <WHAT IS IT?>
+#'
+#'                       Defaults to: list(section_name = \"text paragraph\")
+#'
+#' @param aliases <DESCRIBE ME>
+#'                <WHAT IS IT?>
+#'
+#'                Defaults to: c()
+#'
+#' @param export_func <DESCRIBE ME>
+#'                    <WHAT IS IT?>
+#'
+#'                    Defaults to: "..auto.."
+#'
+#' @param return <DESCRIBE ME>
+#'               <WHAT IS IT?>
+#'
+#'               Defaults to: "WHAT IS RETURNED??"
+#'
+#' @param example_text <DESCRIBE ME>
+#'                     <WHAT IS IT?>
+#'
+#'                     Defaults to: "\n"
+#'
+#' @param filename <DESCRIBE ME>
+#'                 <WHAT IS IT?>
+#'
+#'                 Defaults to: basename(file_full_path)
+#'
+#' @param title <DESCRIBE ME>
+#'              <WHAT IS IT?>
+#'
+#'              Defaults to: filename
+#'
+#' @param header <DESCRIBE ME>
+#'               <WHAT IS IT?>
+#'
+#'               Defaults to: filename
+#'
+#' @param okay_to_source.safety_flag <DESCRIBE ME>
+#'                                   <WHAT IS IT?>
+#'
+#'                                   Defaults to: FALSE
+#'
+#' @param min_width <DESCRIBE ME>
+#'                  <WHAT IS IT?>
+#'
+#'                  Defaults to: 62L
+#'
+#' @param left_pad <DESCRIBE ME>
+#'                 <WHAT IS IT?>
+#'
+#'                 Defaults to: 3L
+#'
+#' @param collapse <DESCRIBE ME>
+#'                 <WHAT IS IT?>
+#'
+#'                 Defaults to: "\n"
+#' ## ------------------------------------------------------------------------ ##
+#'
+#' @return
+#' WHAT IS RETURNED??
+#'
+#' @examples
+#'
+#'
+NULL
+
+
 # framework borrowed from: 
 # https://gist.github.com/jefferys/b79fe87314b0dc72fec9
 
@@ -60,24 +182,31 @@
 
 # # 
 
-catn <- function(..., sep="\n")
+
+#' @rdname roxygen_documentation_template_and_format
+#' @importFrom magrittr %>%
+#' @exportcatn <- function(..., sep="\n")
 cat(..., sep="\n")
 
-DEVING <- TRUE
+# DEVING <- TRUE
 
-# #' @importFrom magrittr %<>%
-# #' @importFrom magrittr %>%
+#' @rdname roxygen_documentation_template_and_format
+#' @importFrom magrittr %>%
+#' @importFrom magrittr %<>%
+#' @export
 make_group_documentation <- function(
     file_full_path
   , one_liner       = "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)"
   , detailed_desc   = "DETAILED DESCRIPTION of what these functions do"
   , other_sections  = list(section_name = "text paragraph")
   , aliases         = c()
+  , export_func     = "..auto.."
   , return          = "WHAT IS RETURNED??"
   , example_text    = "\n"
   , filename        = basename(file_full_path)
   , title           = filename
   , header          = filename
+  , okay_to_source.safety_flag = FALSE
 ) {
   if (length(file_full_path) != 1 || !is.character(file_full_path) || !nzchar(file_full_path))
     stop("invalid input for file_full_path --  It should be a character string of length 1")
@@ -112,8 +241,7 @@ make_group_documentation <- function(
                         paste(collapse="\n\n")
   }
 
-  make_param_docs_from_file(file_full_path)
-  PARAMS_DOC_GENERAL <- make_param_docs_from_file(file_full_path)
+  PARAMS_DOC_GENERAL <- make_param_docs_from_file(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag)
 
   MAIN <- paste(sep="\n"
       , title
@@ -142,35 +270,52 @@ make_group_documentation <- function(
 
   catn(MAIN)
 
+  FUNCS <- get_functions_and_formals(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag) %>% 
+              names()
+  
+  if (identical(export_func, "..auto.."))
+    export_func <- !grepl("^\\.", FUNCS)
+  else if (!is.logical(export_func))
+    stop("Further export_func implementation remains as a TODO -- for now options are simply TRUE/FALSE or \"..auto..\"")
+  if (any(is.na(export_func)))
+    stop("export_func cannot be nor contain NAs")
 
-&&&&&&&&&&&&&&&&&&& LEFT OFF HERE
-  ## TODO:  use 
-  #    formals_as_list <- get_functions_and_formals(file_full_path, TRUE)
-  # and read the function name to determine whether to export or not.
-  # if not export, preface with a '#'?
-&&& ???  export_func &&&&&&&&
+
+# &&&&&&&&&&&&&&&&&&& LEFT OFF HERE
+#   ## TODO:  use 
+#   #    formals_as_list <- get_functions_and_formals(file_full_path, TRUE)
+#   # and read the function name to determine whether to export or not.
+#   # if not export, preface with a '#'?
+# &&& ???  export_func &&&&&&&&
   FUNC_PART <- paste(sep="\n"
       , rdname
       , "@importFrom magrittr %>%"
-      , ifelse(export_func, "", "# ", "@export")
+      , paste0(ifelse(export_func, "", "# "), "@export")
     ) %>% 
     add_roxygen_ticks(clear_multiple_lines=TRUE)
 
   catn("\n~~~~~~~~~~~~~~~~~~~\n")
-  catn(FUNC_PART)
 
-
-## TEMPLATE FOR FUNCTIONS
-#' @rdname NAME
-#' @importFrom magrittr %>%
-#' @export
+  for (i in seq_along(FUNC_PART)) {
+    catn("\n---------------------------------")
+    catn(FUNCS[[i]])
+    catn(FUNC_PART[[i]])
+    catn("---------------------------------")
+  }
+  # catn(FUNC_PART)
 
   return(list(MAIN, FUNC_PART))
 }
-if (FALSE | DEVING)
-  make_group_documentation(file_full_path)
+if (FALSE) {
+  # make_group_documentation(file_full_path, okay_to_source.safety_flag=TRUE)
+  "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R" %>% 
+  make_group_documentation(okay_to_source.safety_flag=TRUE)
+}
 
-add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
+#' @rdname roxygen_documentation_template_and_format
+#' @importFrom magrittr %>%
+# #' @export
+#' add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L) {
   ret <- strsplit(x, "\\n") %>%
           vapply(function(x_i) paste0(tick, x_i, collapse="\n"), character(1L))
 
@@ -187,7 +332,10 @@ add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_leas
   return(ret)
 } 
 
-neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
+#' @rdname roxygen_documentation_template_and_format
+#' @importFrom magrittr %>%
+#' # @export
+#' neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
   if (!is.numeric(left_pad)) {
     warning("'left_pad' should be a number.  Will use 0")
     left_pad <- 0
@@ -215,86 +363,3 @@ neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
 # aliases vector of strings. defaults to c()
 
 
-#==========================================================
-# %s
-#==========================================================
-
-#' Group of functions page title
-#' 
-#' Group of functions Description section
-#' 
-#' Group of functions Details paragraph.
-#'
-#' @section After Arguments and Value sections:
-#' Despite its location, this actually comes after the Arguments and Value sections.
-#' Also, don't need to use null, could annotate first function, and then
-#' using function name as the groupBy name is more intuitive.
-#' 
-#' @param x a param for toBar and notToBar
-#' @param y a param just for notToBar
-#' @return Hard to have one return section for all functions,
-#' might want to have a manual list here.
-#' @name anyNameButFunctionNameIsUnique
-NULL
-
-
-
-#' collectArgs and iterateWithArgs
-#' 
-#' Functions to cleanly collect arguments from within one function or environment (to then pass to another or to iterate over)
-#' 
-#' \code{collectArgs()} colects objects from an envrionment into a single list. Generally, the list will then be passed to other functions (usually with \code{\link[base]{do.call}})
-#' 
-#' \code{iterateWithArgs()} similarly collects the objects in an environment, with the difference that one specific object is selected to iterate over. For each iteration, the given value is passed along with all the other objects to \code{FUNC}.
-#'
-# # ' @section After Arguments and Value sections:
-# # ' Despite its location, this actually comes after the Arguments and Value sections.
-# # ' Also, don't need to use null, could annotate first function, and then
-# # ' using function name as the groupBy name is more intuitive.
-#' 
-#' @param except A vector of string values. Objects to \emph{NOT} include in the collection
-#'               Generally, the user will not want to pass objets created inside the function and hence will pass to except
-#'               _NOTE_ pass the quoted string-name of the object, not the object itself.
-#' @param incl.dots A single logical value. Should the \code{...} be collected as well?  Default is \code{TRUE}.
-#'                  \emph{NOTE: Has no effect in functions without dots argument}
-#' @param all.names A single logical value. Passed to \code{ls()}. When \code{FALSE}, then objects whose name begins with a '.' are omitted from the collection
-#' @param envir     An \code{environment} object. Passed to \code{ls()}. The environment from which to collect the objects. Defaults to \code{parent.frame}
-#'
-#' @return 
-#' for \code{collectArgs}: A list of all of the objects in \code{envir} (less any objects excluded via the parameters). The names of the list are the names of object in \code{envir}.
-#' 
-#' for \code{iterateWithArgs}: A list of the return values of \code{FUNC}, the length of \code{arg_to_iterate_over}. Naming of the list will be handled by \code{\link[base]{do.call}}
-#' 
-#' @name collectArgs-and-iterateWithArgs
-#' @examples
-#' sample_function <- function(x, base, thresh=500, verbose=TRUE) {
-#' 
-#'   some_object    <- is.na(x) ## an example of an object that we will exclude
-#'   another_object <- 1:10     ## an example of an object that we will exclude
-#' 
-#'   if (length(x) > 1) {
-#'     return(iterateWithArgs(x, FUNC=sample_function, except=c("some_object", "another_object")))
-#'   }
-#' 
-#'   ret <- (base ^ x)
-#' 
-#'   if (verbose)
-#'     cat(base, "^", x, " is ", ifelse(ret > thresh, "", "NOT "), "larger than ", thresh, "\n")
-#' 
-#'   return(ret)
-#' }
-#' 
-#' sample_function(5, base=2)
-#' sample_function(5:10, base=2)
-#' 
-#' 
-#'  some_function <- function(x, param1, param2, etc, ...) {
-#' 
-#'    ARGS <- collectArgs(except="x")
-#'    return(
-#'            lapply(x, function(x_i) 
-#'               do.call(some_function, c(ARGS, x=x_i))
-#'            )
-#'          )
-#'  }
-NULL
