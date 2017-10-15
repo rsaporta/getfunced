@@ -16,7 +16,14 @@ function_one <- function(file_full_path, filename="name 1", folder=getOption("wr
 
 
 
-function_two <- function(file_full_path, filename="NAME 2", folder=getOption("wrkDir", default="~/test_dir"), unqiue_param_number_2, wrongly_shared="some param", uneven_param = "this is just in 2nd") {
+function_two <- function(
+  file_full_path
+, filename="NAME 2"
+, folder=getOption("wrkDir", default="~/test_dir")
+, unqiue_param_number_2
+, wrongly_shared="some param"
+, uneven_param = "this is just in 2nd"
+) {
   "bar"
 
   list(foo = "bar")
@@ -40,5 +47,8 @@ function_three <- function(file_full_path, filename="NAME 2", folder=getOption("
   "blaaaaahhhhhh"
 }
 
+.func_starting_with_dot <- function(param_one, other_param_, etc) {
+
+}
 
 
