@@ -7,8 +7,8 @@ indent_from_param <- function(param) {
   (nchar(param) + 8) %>% rep(x=" ") %>% paste0(collapse="")
 }
 
-make_param_docs_from_file <- function(file_full_path) {
-  formals_as_list <- get_functions_and_formals(file_full_path, TRUE)
+make_param_docs_from_file <- function(file_full_path, okay_to_source.safety_flag=FALSE) {
+  formals_as_list <- get_functions_and_formals(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag)
   parameters_with_defaults <- lapply(formals_as_list, capture_output_of_formals_of_one_function)
 
   FUNCTIONS  <- names(formals_as_list)
