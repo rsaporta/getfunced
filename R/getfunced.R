@@ -1,19 +1,3 @@
-if (FALSE) {
-  library(magrittr)
-  library(colorout)
-  options(width = 101)
-  file <- "~/Development/rpkgs/getfunced/file_for_testing.R"
-  ret <- get_funced(file, okay_to_source.safety_flag=TRUE)
-  ret
-  for (r in ret) {
-    cat("\n")
-    cat("|-------------------------------------------------------------|\n")
-    cat(r, "\n")
-    cat("|-------------------------------------------------------------|\n\n")
-  }
-}
-  
-
 #' @importFrom tools toTitleCase
 #' @importFrom rsugeneral topropper
 get_funced <- function(file, okay_to_source.safety_flag=FALSE) { 
@@ -33,7 +17,7 @@ get_functions_and_formals <- function(file, okay_to_source.safety_flag=FALSE) {
   e <- new.env()
   source(file=file, local=e)
   
-  objects <- ls(envir=e, all=TRUE)
+  objects <- ls(envir=e, all.names=TRUE)
   names(objects) <- objects
 
   functions <- lapply(objects, function(x) if (is.function(get(x, envir=e))) get(x, envir=e))
@@ -48,6 +32,8 @@ get_functions_and_formals <- function(file, okay_to_source.safety_flag=FALSE) {
 #' @importFrom magrittr %<>%
 #' @importFrom magrittr %>%
 #' @importFrom stats setNames
+#' @importFrom collectArgs iterateWithArgs
+#' @importFrom collectArgs collectArgs
 format_function <- function(formals_as_list, func_nm=names(formals_as_list), max_wdith=88, multi_line="auto") {
   if (!length(formals_as_list)) {
     warning("formals_as_list had no length")
@@ -146,7 +132,7 @@ format_multiline <- function(line1, formals_as_list, left_pad=2, comma_front=TRU
   return(ret)
 }
 
-
+#' @importFrom utils capture.output
 capture_output_of_formals_of_one_function <- function(formals_as_list) {
   ## Would prefer to use capture.output as that is more ine line with the user's original writing
   ##   and better captures values such as `seq(from=1L, to=5L)`  or  `12345L`
@@ -165,8 +151,8 @@ capture_output_of_formals_of_one_function <- function(formals_as_list) {
   which_strings <- vapply(formals_as_list, function(x) is.character(x) && length(x) == 1 && !is.na(x), FUN.VALUE = logical(1L))
 
   ret <- ifelse(grepl("^\\s*\\[\\s*\\d\\s*\\]", out_via_co), out_via_ac, out_via_co) %>% 
-           gsub(pattern="\n", replace="\\\\n", x=.) %>% 
-           gsub(pattern="\"", replace="\\\\\"", x=.)
+           gsub(pattern="\n", replacement="\\\\n", x=.) %>% 
+           gsub(pattern="\"", replacement="\\\\\"", x=.)
 
   ret[which_strings] %<>% paste0("\"", ., "\"")
 

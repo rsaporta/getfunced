@@ -1,10 +1,7 @@
 # ========================================================== #
-#    roxygen documentation template and format.R             #
+#    roxygen_documentation_template_and_format.R             #
 # ========================================================== #
 #
-if (FALSE)
-devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
-
 #' Roxygen Documentation Template and Format
 #'
 #' ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)
@@ -14,39 +11,14 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #' @name roxygen_documentation_template_and_format
 #'
 #X## -------------------------------  PARAMS  ------------------------------- ##
-#' @param x <DESCRIBE ME>
-#'          <WHAT IS IT?>
-#'
-#' @param tick <DESCRIBE ME>
-#'             <WHAT IS IT?>
-#'
-#'             Defaults to: "#' "
-#'
-#' @param clear_multiple_lines <DESCRIBE ME>
-#'                             <WHAT IS IT?>
-#'
-#'                             Defaults to: FALSE
-#'
-#' @param at_least_reps <DESCRIBE ME>
-#'                      <WHAT IS IT?>
-#'
-#'                      Defaults to: 2L
-#'
-#' @param ... <DESCRIBE ME>
-#'            <WHAT IS IT?>
-#'
-#' @param sep <DESCRIBE ME>
-#'            <WHAT IS IT?>
-#'
-#'            Defaults to: "\n"
-#'
 #' @param file_full_path <DESCRIBE ME>
 #'                       <WHAT IS IT?>
 #'
 #' @param one_liner <DESCRIBE ME>
 #'                  <WHAT IS IT?>
 #'
-#'                  Defaults to: "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)"
+#'                  Defaults to: "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO?
+#'  (or the name of the main function)"
 #'
 #' @param detailed_desc <DESCRIBE ME>
 #'                      <WHAT IS IT?>
@@ -56,7 +28,7 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #' @param other_sections <DESCRIBE ME>
 #'                       <WHAT IS IT?>
 #'
-#'                       Defaults to: list(section_name = \"text paragraph\")
+#'                       Defaults to: list(section_name = \\"text paragraph\\")
 #'
 #' @param aliases <DESCRIBE ME>
 #'                <WHAT IS IT?>
@@ -76,7 +48,7 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #' @param example_text <DESCRIBE ME>
 #'                     <WHAT IS IT?>
 #'
-#'                     Defaults to: "\n"
+#'                     Defaults to: "\\n"
 #'
 #' @param filename <DESCRIBE ME>
 #'                 <WHAT IS IT?>
@@ -98,6 +70,37 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #'
 #'                                   Defaults to: FALSE
 #'
+#' @param x <DESCRIBE ME>
+#'          <WHAT IS IT?>
+#'
+#' @param tick <DESCRIBE ME>
+#'             <WHAT IS IT?>
+#'
+#'             Defaults to: "#' "
+#'
+#' @param clear_multiple_lines <DESCRIBE ME>
+#'                             <WHAT IS IT?>
+#'
+#'                             Defaults to: FALSE
+#'
+#' @param at_least_reps <DESCRIBE ME>
+#'                      <WHAT IS IT?>
+#'
+#'                      Defaults to: 2L
+#'
+#' @param comment_space <DESCRIBE ME>
+#'                      <WHAT IS IT?>
+#'
+#'                      Defaults to: "X"
+#'
+#' @param ... <DESCRIBE ME>
+#'            <WHAT IS IT?>
+#'
+#' @param sep <DESCRIBE ME>
+#'            <WHAT IS IT?>
+#'
+#'            Defaults to: "\\"\\""
+#'
 #' @param min_width <DESCRIBE ME>
 #'                  <WHAT IS IT?>
 #'
@@ -111,7 +114,7 @@ devtools::document("/Users/rsaporta/Development/rpkgs/getfunced/")
 #' @param collapse <DESCRIBE ME>
 #'                 <WHAT IS IT?>
 #'
-#'                 Defaults to: "\n"
+#'                 Defaults to: "\\n"
 #X## ------------------------------------------------------------------------ ##
 #'
 #' @return
@@ -173,24 +176,12 @@ NULL
 # #' @export
 # 
 
-# if (FALSE) {
-#   file_full_path <- "/Users/rsaporta/Development/rpkgs/getfunced/roxygen documentation template and format.R"
-#   filename <- basename(file_full_path)
-
-#   title=basename(file_full_path)
-#   left_pad = 3
-
-#   example_text <- "/Users/rsaporta/Development/rpkgs/getfunced/example_file.R"
-# }
-
-# # 
-
-
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
 #X## @export
-catn <- function(..., sep="\n")
-cat(..., sep="\n")
+catn <- function(..., sep="") {
+  cat(..., sep=sep, "\n")
+}
 
 # DEVING <- TRUE
 
@@ -198,7 +189,7 @@ cat(..., sep="\n")
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
 #' @export
-make_group_documentation <- function(
+add_documentation_to_file_as_one_group <- function(
     file_full_path
   , one_liner       = "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)"
   , detailed_desc   = "DETAILED DESCRIPTION of what these functions do"
@@ -229,7 +220,7 @@ make_group_documentation <- function(
   header %<>% neat_box %>% paste0("\n# ")
 
   if (missing(title)) {
-    title %<>% gsub(pattern="\\.[R|r]$", replace="") %>% title_case_ap_style()
+    title %<>% gsub(pattern="\\.[R|r]$", replacement="") %>% title_case_ap_style()
   }
   # title %<>% gsub(pattern=" ", "_")
 
@@ -285,22 +276,17 @@ make_group_documentation <- function(
     stop("export_func cannot be nor contain NAs")
 
 
-# &&&&&&&&&&&&&&&&&&& LEFT OFF HERE
-#   ## TODO:  use 
-#   #    formals_as_list <- get_functions_and_formals(file_full_path, TRUE)
-#   # and read the function name to determine whether to export or not.
-#   # if not export, preface with a '#'?
-# &&& ???  export_func &&&&&&&&
   FUNC_PART <- paste(sep="\n"
       , rdname
       , "@importFrom magrittr %>%"
       , paste0(ifelse(export_func, "", "# "), "@export")
     ) %>% 
-    add_roxygen_ticks(clear_multiple_lines=TRUE) %>% 
+    add_roxygen_ticks(clear_multiple_lines=TRUE)
 
   catn("\n##   ~~~~~~~~~~~~~~~~~~~\n")
 
   for (i in seq_along(FUNC_PART)) {
+    catn("\n")
     catn("\n---------------------------------")
     catn("            -= ", FUNCS[[i]], " =- ")
     catn(FUNC_PART[[i]])
@@ -308,18 +294,18 @@ make_group_documentation <- function(
   }
   # catn(FUNC_PART)
 
-  return(list(MAIN, FUNC_PART))
-}
-if (FALSE) {
+  ## TODO TUES 2017-10-17
+  # instead of just cat to screen, we should write to file. 
+  # 1.  look for function definition
+  # 2.  Check for any current documentation
+  # 3.  Either (a) 'overwrite' (b) 'merge' (c) 'append'
 
-  # make_group_documentation(file_full_path, okay_to_source.safety_flag=TRUE)
-  "~/Development/rpkgs/getfunced/R/roxygen documentation template and format.R" %>% 
-  make_group_documentation(okay_to_source.safety_flag=TRUE)
+  return(invisible(list(MAIN, FUNC_PART)))
 }
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#' @export
+#X# @export
 add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L, comment_space="X") {
   pat.comment  <- paste0("^", tick, "\\s*#")
   repl.comment <- paste0("#", comment_space, "#")
@@ -329,7 +315,7 @@ add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_leas
   ret <- strsplit(x, "\\n") %>%
           vapply(function(x_i) {
               paste0(tick, x_i) %>% 
-              gsub(pattern=pat.comment, replace=repl.comment) %>%
+              gsub(pattern=pat.comment, replacement=repl.comment) %>%
               paste0(collapse="\n")
           }, FUN.VALUE=character(1L))
 
@@ -338,7 +324,7 @@ add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_leas
     rep <- tick %>% paste0("\n", collapse = "")
     safety.no_infinite_loop <- 100
     while(grepl(pat, ret) && safety.no_infinite_loop) {
-      ret %<>% gsub(pattern=pat, replace=rep)
+      ret %<>% gsub(pattern=pat, replacement=rep)
       safety.no_infinite_loop %<>% "-"(1)
     } ## // while-loop
   } ## // if clause
@@ -372,10 +358,3 @@ neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
   ## RETURN
   c(hr_bar, text_bar, hr_bar) %>% paste0("# ", ., " #", collapse=collapse)
 }
-
-# filename
-# filename %>% toproper
-
-# aliases vector of strings. defaults to c()
-
-

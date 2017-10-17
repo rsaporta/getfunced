@@ -1,19 +1,28 @@
-if (FALSE)
-file_full_path <- "~/Development/rpkgs/getfunced/test_file_with_matching_funcs.R"
-
+#' helper function to indent secondary lines of text, based on nchar of param
+#' 
+#' @param param the name of a function parameter whose description text will be indented in the documentation
+#' 
+#X# dont @export
 indent_from_param <- function(param) {
   if (length(param) > 1)
     return(vapply(param, indent_from_param, FUN.VALUE = character(1L)))
   (nchar(param) + 8) %>% rep(x=" ") %>% paste0(collapse="")
 }
 
+#' Takes a file and creates a single, multi-paragraph string of all the params in an appropriate syntax
+#' 
+#' @param file_full_path The file which will be documented
+#' @param okay_to_source.safety_flag A TRUE/FALSE flag. Setting to FALSE will cause function to terminate in error without reading in the file.
+#' 
+#X# dont @export
 make_param_docs_from_file <- function(file_full_path, okay_to_source.safety_flag=FALSE) {
   formals_as_list <- get_functions_and_formals(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag)
   parameters_with_defaults <- lapply(formals_as_list, capture_output_of_formals_of_one_function)
 
   FUNCTIONS  <- names(formals_as_list)
   PARAMETERS <- lapply(formals_as_list, names) %>% unlist(use.names = FALSE)
-  DEFAULTS   <- unlist(parameters_with_defaults, use.names = FALSE)
+  DEFAULTS   <- unlist(parameters_with_defaults, use.names = FALSE) %>% 
+                  gsub(pattern="\\\\", replacement="\\\\\\\\")  ## escape the double escape
 
   function_param_lookup <- lapply(names(formals_as_list), function(nm) rep(nm, length(formals_as_list[[nm]]))) %>% 
                             unlist(use.names=FALSE) %>% 

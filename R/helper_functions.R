@@ -14,7 +14,7 @@ title_case_ap_style <- function(x) {
   regex_no_cap <- words_not_to_cap %>% paste(collapse="|") %>% paste0("( (", ., ")\\b)")
 
   x <- gsub( "\\b([a-z])([a-z]+)", "\\U\\1\\L\\2" ,x, perl=TRUE ) %>% 
-        gsub(pattern=regex_no_cap, replace="\\L\\1", perl=TRUE)
+        gsub(pattern=regex_no_cap, replacement="\\L\\1", perl=TRUE)
 
   return(x)
 }
