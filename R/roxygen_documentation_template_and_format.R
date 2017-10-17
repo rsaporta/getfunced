@@ -178,7 +178,7 @@ NULL
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#X## @export
+#' (not exported)
 catn <- function(..., sep="") {
   cat(..., sep=sep, "\n")
 }
@@ -305,7 +305,7 @@ add_documentation_to_file_as_one_group <- function(
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#X# @export
+#' (not exported)
 add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_least_reps=2L, comment_space="X") {
   pat.comment  <- paste0("^", tick, "\\s*#")
   repl.comment <- paste0("#", comment_space, "#")
@@ -336,7 +336,7 @@ add_roxygen_ticks <- function(x, tick="#' ", clear_multiple_lines=FALSE, at_leas
 
 #' @rdname roxygen_documentation_template_and_format
 #' @importFrom magrittr %>%
-#X## @export
+#' (not exported)
 neat_box <- function(x, min_width = 62L, left_pad=3L, collapse="\n") {
   if (!is.numeric(left_pad)) {
     warning("'left_pad' should be a number.  Will use 0")

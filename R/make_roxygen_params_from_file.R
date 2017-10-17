@@ -2,7 +2,7 @@
 #' 
 #' @param param the name of a function parameter whose description text will be indented in the documentation
 #' 
-#X# dont @export
+#' (not exported)
 indent_from_param <- function(param) {
   if (length(param) > 1)
     return(vapply(param, indent_from_param, FUN.VALUE = character(1L)))
@@ -14,7 +14,7 @@ indent_from_param <- function(param) {
 #' @param file_full_path The file which will be documented
 #' @param okay_to_source.safety_flag A TRUE/FALSE flag. Setting to FALSE will cause function to terminate in error without reading in the file.
 #' 
-#X# dont @export
+#' (not exported)
 make_param_docs_from_file <- function(file_full_path, okay_to_source.safety_flag=FALSE) {
   formals_as_list <- get_functions_and_formals(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag)
   parameters_with_defaults <- lapply(formals_as_list, capture_output_of_formals_of_one_function)
