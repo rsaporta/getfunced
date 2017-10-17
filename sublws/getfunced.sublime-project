@@ -2,12 +2,12 @@
 	"folders":
 	[
 		{
-			"path": "",
-			"name": ""
+			"name": "getfunced",
+			"path": "~/Development/rpkgs/getfunced/"
 		},
 		{
-			"path": "~/Development/rsutils_packages/rsugeneral/R",
-			"name": "GENERAL RSUTIL"
+			"name": "GENERAL RSUTIL",
+			"path": "~/Development/rsutils_packages/rsugeneral/R"
 		}
 	]
 }
