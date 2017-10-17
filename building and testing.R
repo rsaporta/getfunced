@@ -11,6 +11,7 @@ if (FALSE)
     devtools::use_package("magrittr", pkg=pkg_full_path)
     devtools::use_package("stats",    pkg=pkg_full_path)
     devtools::use_package("utils",    pkg=pkg_full_path)
+    devtools::use_package("collectArgs", pkg=pkg_full_path)
   }
 
   ## SET UP DOCUMENTATION
@@ -18,7 +19,7 @@ if (FALSE)
 
   ## VIGNETTE
   if (FALSE) {
-    devtools::use_vignette("getfunced_and_iterateWithArgs", pkg=pkg_full_path)
+    devtools::use_vignette("getfunced", pkg=pkg_full_path)
     devtools::build_vignettes(pkg=pkg_full_path)
   }
 

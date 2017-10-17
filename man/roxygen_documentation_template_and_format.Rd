@@ -3,14 +3,14 @@
 \name{roxygen_documentation_template_and_format}
 \alias{roxygen_documentation_template_and_format}
 \alias{catn}
-\alias{make_group_documentation}
+\alias{add_documentation_to_file_as_one_group}
 \alias{add_roxygen_ticks}
 \alias{neat_box}
 \title{Roxygen Documentation Template and Format}
 \usage{
-catn(..., sep = "\\n")
+catn(..., sep = "")
 
-make_group_documentation(file_full_path,
+add_documentation_to_file_as_one_group(file_full_path,
   one_liner = "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)",
   detailed_desc = "DETAILED DESCRIPTION of what these functions do",
   other_sections = list(section_name = "text paragraph"), aliases = c(),
@@ -30,7 +30,7 @@ neat_box(x, min_width = 62L, left_pad = 3L, collapse = "\\n")
 \item{sep}{<DESCRIBE ME>
            <WHAT IS IT?>
 
-           Defaults to: "\n"}
+           Defaults to: "\\"\\""}
 
 \item{file_full_path}{<DESCRIBE ME>
 <WHAT IS IT?>}
@@ -38,7 +38,8 @@ neat_box(x, min_width = 62L, left_pad = 3L, collapse = "\\n")
 \item{one_liner}{<DESCRIBE ME>
                  <WHAT IS IT?>
 
-                 Defaults to: "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO? (or the name of the main function)"}
+                 Defaults to: "ONE-LINER WHAT DO THESE GROUP OF FUNCS DO?
+ (or the name of the main function)"}
 
 \item{detailed_desc}{<DESCRIBE ME>
                      <WHAT IS IT?>
@@ -48,7 +49,7 @@ neat_box(x, min_width = 62L, left_pad = 3L, collapse = "\\n")
 \item{other_sections}{<DESCRIBE ME>
                       <WHAT IS IT?>
 
-                      Defaults to: list(section_name = \"text paragraph\")}
+                      Defaults to: list(section_name = \\"text paragraph\\")}
 
 \item{aliases}{<DESCRIBE ME>
                <WHAT IS IT?>
@@ -68,7 +69,7 @@ neat_box(x, min_width = 62L, left_pad = 3L, collapse = "\\n")
 \item{example_text}{<DESCRIBE ME>
                     <WHAT IS IT?>
 
-                    Defaults to: "\n"}
+                    Defaults to: "\\n"}
 
 \item{filename}{<DESCRIBE ME>
                 <WHAT IS IT?>
@@ -108,6 +109,11 @@ neat_box(x, min_width = 62L, left_pad = 3L, collapse = "\\n")
 
                      Defaults to: 2L}
 
+\item{comment_space}{<DESCRIBE ME>
+                     <WHAT IS IT?>
+
+                     Defaults to: "X"}
+
 \item{min_width}{<DESCRIBE ME>
                  <WHAT IS IT?>
 
@@ -121,7 +127,7 @@ neat_box(x, min_width = 62L, left_pad = 3L, collapse = "\\n")
 \item{collapse}{<DESCRIBE ME>
                 <WHAT IS IT?>
 
-                Defaults to: "\n"}
+                Defaults to: "\\n"}
 }
 \value{
 WHAT IS RETURNED??
