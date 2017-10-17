@@ -196,7 +196,7 @@ add_documentation_to_file_as_one_group <- function(
   , other_sections  = list(section_name = "text paragraph")
   , aliases         = c()
   , export_func     = "..auto.."
-  , return          = "WHAT IS RETURNED??"
+  , return          = "..auto.."  ## "WHAT IS RETURNED??"
   , example_text    = "\n"
   , filename        = basename(file_full_path)
   , title           = filename
@@ -238,7 +238,14 @@ add_documentation_to_file_as_one_group <- function(
 
   PARAMS_DOC_GENERAL <- make_param_docs_from_file(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag)
 
-  MAIN <- paste(sep="\n"
+  if (return %in% "..auto..") {
+    ## "WHAT IS RETURNED??"  ## TODO
+    FUNCS <- get_functions_and_formals(file_full_path, okay_to_source.safety_flag=okay_to_source.safety_flag) %>% names
+    return <- sprintf("    for \\code{%s} ????????", FUNCS) %>% c("", .) %>% paste0(collapse="\n\n")
+  }
+
+  MAIN <- paste(
+        sep="\n"
       , title
       , ""
       , one_liner
