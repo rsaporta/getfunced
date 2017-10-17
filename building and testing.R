@@ -39,7 +39,7 @@ if (FALSE)
   ## REMEMBER TO CHECK OUT THE LATEST STABLE BRANCH BEFORE BUILDING
   if (FALSE) {
     rsupkg_next_version("getfunced", .test_run=TRUE)
-    # rsupkg_next_version("getfunced", .test_run=FALSE)
+    # rsutils:::rsupkg_next_version("getfunced", .test_run=FALSE)
     # devtools::build(pkg=pkg_full_path)
   }
 }
